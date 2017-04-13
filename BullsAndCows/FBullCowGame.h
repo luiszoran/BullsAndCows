@@ -1,6 +1,11 @@
+/* The game logic (no view code or direct user interaction)
+The game is a simple guess the word game based on Mastermind
+*/
+
 #pragma once
 #include <string>
 
+// Unreal friendly sintax
 using FString = std::string;
 using int32 = int;
 
@@ -20,10 +25,11 @@ enum EGuessStatus {
 class FBullCowGame {
 public:
 	FBullCowGame();
-	int32 GetMaxTries() const;
 	int32 GetCurrentTry() const;
 	int32 GetHiddenWordLength() const;
 	bool IsGameWon() const;
+	int32 GetMaxTries() const;
+
 	EGuessStatus CheckGuessValidity(FString) const;
 
 	void Reset(); // TODO change return type
@@ -31,8 +37,9 @@ public:
 
 	
 private:
+	bool IsIsogram(FString) const;
+	bool IsLowerCase(FString) const;
 	int32 MyCurrentTry;
-	int32 MyMaxTries;
 	FString MyHiddenWord;
 	bool bIsGameWon;
 };
