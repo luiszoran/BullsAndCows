@@ -1,11 +1,12 @@
 #include "FBullCowGame.h"
 #include <map>
+#include <vector>
 
 // Unreal friendly sintax
 #define TMap std::map
 
 FBullCowGame::FBullCowGame() {
-	Reset();
+	Reset("");
 }
 
 int32 FBullCowGame::GetCurrentTry() const {
@@ -15,6 +16,16 @@ int32 FBullCowGame::GetCurrentTry() const {
 int32 FBullCowGame::GetHiddenWordLength() const
 {
 	return MyHiddenWord.length();
+}
+
+int32 FBullCowGame::GetMinWordLength() const
+{
+	return MinWordLength;
+}
+
+int32 FBullCowGame::GetMaxWordLength() const
+{
+	return MaxWordLength;
 }
 
 bool FBullCowGame::IsGameWon() const {
@@ -34,10 +45,23 @@ int32 FBullCowGame::GetMaxTries() const {
 	return WordLengthToMaxTries[MyHiddenWord.length()];
 }
 
-void FBullCowGame::Reset() {
-	const FString HIDDEN_WORD = "ant";
-	MyHiddenWord = HIDDEN_WORD;
-	
+FString FBullCowGame::GetRandomWord(int32 length) const {
+	std::vector<FString> threeLetterWord = { "and", "two" };
+	std::vector<FString> fourLetterWord = { "word", "cash" };
+	std::vector<FString> fiveLetterWord = { "jumpy", "brick" };
+	std::vector<FString> sixLetterWord = { "dwarfs", "drying" };
+	std::vector<FString> sevenLetterWord = { "dumbing", "abdomen" };
+	TMap<int32, std::vector<FString>> WordLengthToMaxTries { { 3, threeLetterWord }, { 4, fourLetterWord }, { 5, fiveLetterWord }, { 6, sixLetterWord }, { 7, sevenLetterWord }};
+	FString Word = WordLengthToMaxTries[length][0 + (rand() % (int)(1 - 0 + 1))];
+	return Word;
+}
+
+void FBullCowGame::Reset(FString Word) {
+	MyHiddenWord = Word;
+	const int32 MIN_LENGTH = 3;
+	MinWordLength = MIN_LENGTH;
+	const int32 MAX_LENGTH = 7;
+	MaxWordLength = MAX_LENGTH;
 	bIsGameWon = false;
 	MyCurrentTry = 1;
 	return;

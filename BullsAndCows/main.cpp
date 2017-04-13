@@ -18,6 +18,7 @@ void PlayGame();
 FText GetValidGuess();
 bool AskToPlayAgain();
 void PrintGameSummary();
+int32 ChooseWordLength();
 
 // Game instance
 FBullCowGame BCGame;
@@ -42,14 +43,17 @@ void PrintIntro() {
 	std::cout << "  / | BULL |O            O| COW  | \\ " << std::endl;
 	std::cout << " *  |-,--- |              |------|  * " << std::endl;
 	std::cout << "    ^      ^              ^      ^ " << std::endl;
-	std::cout << "Can you guess the " << BCGame.GetHiddenWordLength();
-	std::cout << " letter isogram I'm thinking of?\n\n";
+/*	std::cout << "Can you guess the " << BCGame.GetHiddenWordLength();
+	std::cout << " letter isogram I'm thinking of?\n\n";*/
 	return;
 }
 
 // plays a single game
 void PlayGame() {
-	BCGame.Reset();
+
+	int32 WordLength = ChooseWordLength();
+	FString Word = BCGame.GetRandomWord(WordLength);
+	BCGame.Reset(Word);
 	int32 MaxTries = BCGame.GetMaxTries();
 
 	while (!BCGame.IsGameWon() && BCGame.GetCurrentTry() <= MaxTries) {
@@ -106,4 +110,24 @@ void PrintGameSummary() {
 	else {
 		std::cout << "You lost, bad luck.\n\n";
 	}
+}
+
+int32 ChooseWordLength() {
+	FText Response = "";
+	int32 length;
+	while (true) {
+		try {
+			std::cout << "How many letters should the isogram be made of (" << BCGame.GetMinWordLength() << "-" << BCGame.GetMaxWordLength() << ")? ";
+			getline(std::cin, Response);
+			length = std::stoi(Response);
+			if (length < BCGame.GetMinWordLength() || length > BCGame.GetMaxWordLength()) {
+				std::cout << "Enter a number between " << BCGame.GetMinWordLength() << " and " << BCGame.GetMaxWordLength() << ".\n";
+			} else {
+				break;
+			}
+		} catch (const std::invalid_argument& ia) {
+			std::cout << "Enter a number.\n";
+		}
+	}
+	return length;
 }

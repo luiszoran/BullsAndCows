@@ -32,7 +32,10 @@ public:
 
 	EGuessStatus CheckGuessValidity(FString) const;
 
-	void Reset(); // TODO change return type
+	int32 GetMinWordLength() const;
+	int32 GetMaxWordLength() const;
+	FString GetRandomWord(int32) const;
+	void Reset(FString);
 	FBullCowCount SubmitValidGuess(FString);
 
 	
@@ -42,4 +45,6 @@ private:
 	int32 MyCurrentTry;
 	FString MyHiddenWord;
 	bool bIsGameWon;
+	int32 MinWordLength;
+	int32 MaxWordLength;
 };
